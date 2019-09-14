@@ -1,0 +1,32 @@
+{
+  "name": "kanjidic2stream",
+  "version": "0.0.1",
+  "description": "Stream kanji definitions from KANJIDIC2",
+  "main": "./lib/index.js",
+  "author": "Forrest Jacobs <forrestjacobs@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "sax": "^1.2.4"
+  },
+  "devDependencies": {
+    "@types/sax": "^1.2.0",
+    "@typescript-eslint/eslint-plugin": "^2.2.0",
+    "@typescript-eslint/parser": "^2.2.0",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.3.0",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf coverage lib tsconfig.tsbuildinfo",
+    "dev": "tsc -w",
+    "format": "prettier --loglevel warn --write \"**/*.{js,json,ts}\"",
+    "lint": "eslint . --ext .js,.ts",
+    "test": "jest"
+  }
+}

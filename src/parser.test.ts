@@ -1,11 +1,14 @@
 import { Parser } from "./parser";
 
 const BASE_CHARACTER = {
-  strokeCount: [],
-  radicalNames: [],
-  on: [],
-  kun: [],
-  meaning: [],
+  codepoints: [],
+  radicals: [],
+  strokeCounts: [],
+  variants: [],
+  radNames: [],
+  dicNumbers: [],
+  queryCodes: [],
+  readingMeanings: [],
   nanori: []
 };
 
@@ -67,7 +70,7 @@ describe("Parser", () => {
     expect(errorHandler).toHaveBeenCalledTimes(0);
   });
 
-  test("parses a radicals", () => {
+  test("parses a radical", () => {
     parser.end(`
       <kanjidic2>
         <character>
@@ -82,8 +85,12 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "亜",
-      radical: 7,
-      nelsonRadical: 7
+      radicals: [
+        {
+          type: "classical",
+          value: 7
+        }
+      ]
     });
   });
 
@@ -103,8 +110,16 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "応",
-      radical: 61,
-      nelsonRadical: 53
+      radicals: [
+        {
+          type: "classical",
+          value: 61
+        },
+        {
+          type: "nelson_c",
+          value: 53
+        }
+      ]
     });
   });
 
@@ -127,7 +142,7 @@ describe("Parser", () => {
       ...BASE_CHARACTER,
       literal: "哀",
       grade: 8,
-      strokeCount: [9],
+      strokeCounts: [9],
       freq: 1715,
       jlpt: 1
     });
@@ -149,7 +164,7 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "飴",
-      strokeCount: [13, 14]
+      strokeCounts: [13, 14]
     });
   });
 
@@ -172,8 +187,8 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "冂",
-      strokeCount: [2],
-      radicalNames: ["まきがまえ", "えながまえ", "どうがまえ", "けいがまえ"]
+      strokeCounts: [2],
+      radNames: ["まきがまえ", "えながまえ", "どうがまえ", "けいがまえ"]
     });
   });
 
@@ -201,9 +216,22 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "决",
-      on: ["ケチ", "ケツ"],
-      kun: ["き.める", "き.まる", "さ.く"],
-      meaning: ["decide", "determine", "judge"]
+      readingMeanings: [
+        {
+          readings: [
+            { type: "ja_on", "value": "ケチ" },
+            { type: "ja_on", "value": "ケツ" },
+            { type: "ja_kun", "value": "き.める" },
+            { type: "ja_kun", "value": "き.まる" },
+            { type: "ja_kun", "value": "さ.く" }
+         ],
+          meanings: [
+            { value: "decide" },
+            { value: "determine" },
+            { value: "judge" }
+          ]
+        }
+      ]
     });
   });
 

@@ -1,22 +1,40 @@
 import { parser, QualifiedTag, SAXParser, Tag } from "sax";
 import { Transform } from "stream";
-import { Character } from "./character";
+import { Character, Rmgroup } from "./character";
 
 type BaseCharacter = Pick<
   Character,
-  "strokeCount" | "radicalNames" | "on" | "kun" | "meaning" | "nanori"
+  | "codepoints"
+  | "radicals"
+  | "strokeCounts"
+  | "variants"
+  | "radNames"
+  | "dicNumbers"
+  | "queryCodes"
+  | "readingMeanings"
+  | "nanori"
 >;
 
 const START_TEXT = "<kanjidic2>";
 
 function makeBaseCharacter(): BaseCharacter {
   return {
-    strokeCount: [],
-    radicalNames: [],
-    on: [],
-    kun: [],
-    meaning: [],
+    codepoints: [],
+    radicals: [],
+    strokeCounts: [],
+    variants: [],
+    radNames: [],
+    dicNumbers: [],
+    queryCodes: [],
+    readingMeanings: [],
     nanori: []
+  };
+}
+
+function makeRmgroup(): Rmgroup {
+  return {
+    readings: [],
+    meanings: []
   };
 }
 
@@ -24,6 +42,7 @@ export class Parser extends Transform {
   private readonly sax: SAXParser;
   private currentCharacter: Partial<Character> &
     BaseCharacter = makeBaseCharacter();
+  private currentRmgroup: Rmgroup = makeRmgroup();
   private startBuffer?: string = "";
 
   public constructor() {
@@ -48,10 +67,10 @@ export class Parser extends Transform {
       );
     };
     saxParser.onclosetag = (tagName): void => {
-      if (tagName === "character") {
-        if (this.currentCharacter.nelsonRadical === undefined) {
-          this.currentCharacter.nelsonRadical = this.currentCharacter.radical;
-        }
+      if (tagName === "rmgroup") {
+        this.currentCharacter.readingMeanings.push(this.currentRmgroup);
+        this.currentRmgroup = makeRmgroup();
+      } else if (tagName === "character") {
         this.push(this.currentCharacter);
         this.currentCharacter = makeBaseCharacter();
       }
@@ -86,7 +105,7 @@ export class Parser extends Transform {
 
   private updateCharacterFromElement(
     name: string,
-    attr: unknown,
+    attr: any,
     text: string
   ): void {
     switch (name) {
@@ -103,52 +122,31 @@ export class Parser extends Transform {
         this.currentCharacter.jlpt = +text;
         break;
       case "stroke_count":
-        this.currentCharacter.strokeCount.push(+text);
+        this.currentCharacter.strokeCounts.push(+text);
         break;
       case "rad_name":
-        this.currentCharacter.radicalNames.push(text);
+        this.currentCharacter.radNames.push(text);
         break;
       case "nanori":
         this.currentCharacter.nanori.push(text);
         break;
       case "rad_value":
-        this.updateCharacterFromRadValue(attr as { rad_type: string }, text);
+        this.currentCharacter.radicals.push({
+          type: attr.rad_type,
+          value: +text
+        });
         break;
       case "reading":
-        this.updateCharacterFromReading(attr as { r_type: string }, text);
+        this.currentRmgroup.readings.push({
+          type: attr.r_type,
+          value: text
+        });
         break;
       case "meaning":
-        if ((attr as { m_lang?: string }).m_lang === undefined) {
-          this.currentCharacter.meaning.push(text);
-        }
-        break;
-    }
-  }
-
-  private updateCharacterFromRadValue(
-    attr: { rad_type: string },
-    text: string
-  ): void {
-    switch (attr.rad_type) {
-      case "classical":
-        this.currentCharacter.radical = +text;
-        break;
-      case "nelson_c":
-        this.currentCharacter.nelsonRadical = +text;
-        break;
-    }
-  }
-
-  private updateCharacterFromReading(
-    attr: { r_type: string },
-    text: string
-  ): void {
-    switch (attr.r_type) {
-      case "ja_on":
-        this.currentCharacter.on.push(text);
-        break;
-      case "ja_kun":
-        this.currentCharacter.kun.push(text);
+        this.currentRmgroup.meanings.push({
+          lang: attr.m_lang,
+          value: text
+        });
         break;
     }
   }

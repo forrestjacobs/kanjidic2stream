@@ -1,16 +1,8 @@
 import { Parser } from "./parser";
 
 const BASE_CHARACTER = {
-  codepoints: {
-    jis208: [],
-    jis212: [],
-    jis213: [],
-    ucs: []
-  },
-  radicals: {
-    classical: [],
-    nelson_c: []
-  },
+  codepoints: {},
+  radicals: {},
   strokeCounts: [],
   variants: {
     jis208: [],
@@ -54,10 +46,17 @@ const BASE_CHARACTER = {
     sh_desc: [],
     four_corner: [],
     deroo: [],
-    misclass: [],
     skip: []
   },
-  readingMeanings: [],
+  readings: {
+    pinyin: [],
+    korean_r: [],
+    korean_h: [],
+    vietnam: [],
+    ja_on: [],
+    ja_kun: []
+  },
+  meanings: {},
   nanori: []
 };
 
@@ -135,8 +134,7 @@ describe("Parser", () => {
       ...BASE_CHARACTER,
       literal: "亜",
       radicals: {
-        classical: [7],
-        nelson_c: []
+        classical: 7
       }
     });
   });
@@ -158,8 +156,8 @@ describe("Parser", () => {
       ...BASE_CHARACTER,
       literal: "応",
       radicals: {
-        classical: [61],
-        nelson_c: [53]
+        classical: 61,
+        nelson_c: 53
       }
     });
   });
@@ -257,21 +255,17 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "决",
-      readingMeanings: [
-        {
-          readings: {
-            pinyin: [],
-            korean_r: [],
-            korean_h: [],
-            vietnam: [],
-            ja_on: ["ケチ", "ケツ"],
-            ja_kun: ["き.める", "き.まる", "さ.く"]
-          },
-          meanings: {
-            en: ["decide", "determine", "judge"]
-          }
-        }
-      ]
+      readings: {
+        pinyin: [],
+        korean_r: [],
+        korean_h: [],
+        vietnam: [],
+        ja_on: ["ケチ", "ケツ"],
+        ja_kun: ["き.める", "き.まる", "さ.く"]
+      },
+      meanings: {
+        en: ["decide", "determine", "judge"]
+      }
     });
   });
 

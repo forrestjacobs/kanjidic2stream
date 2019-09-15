@@ -9,28 +9,17 @@ export interface SkipQueryCode {
   value: string;
 }
 
-export interface Rmgroup {
-  readings: {
-    [type in
-      | "pinyin"
-      | "korean_r"
-      | "korean_h"
-      | "vietnam"
-      | "ja_on"
-      | "ja_kun"]: string[];
-  };
-  meanings: {
-    [lang: string]: string[];
-  };
-}
-
 export interface Character {
   literal: string;
   codepoints: {
-    [type in "jis208" | "jis212" | "jis213" | "ucs"]: string[];
+    jis208?: string;
+    jis212?: string;
+    jis213?: string;
+    ucs: string;
   };
   radicals: {
-    [type in "classical" | "nelson_c"]: number[];
+    classical: number;
+    nelson_c?: number;
   };
   grade?: number;
   strokeCounts: number[];
@@ -82,12 +71,23 @@ export interface Character {
   };
 
   queryCodes: {
-    [type in "sh_desc" | "four_corner" | "deroo" | "misclass"]: string[];
+    [type in "sh_desc" | "four_corner" | "deroo"]: string[];
   } & {
     skip: SkipQueryCode[];
   };
 
-  readingMeanings: Rmgroup[];
+  readings: {
+    [type in
+      | "pinyin"
+      | "korean_r"
+      | "korean_h"
+      | "vietnam"
+      | "ja_on"
+      | "ja_kun"]: string[];
+  };
+  meanings: {
+    [lang: string]: string[];
+  };
 
   nanori: string[];
 }

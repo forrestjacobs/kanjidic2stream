@@ -1,34 +1,28 @@
 import { parser, SAXParser, Tag } from "sax";
 import { Transform } from "stream";
-import { Character, Rmgroup, SkipQueryCode } from "./character";
+import { Character, SkipQueryCode } from "./character";
 
 type BaseCharacter = Pick<
   Character,
-  | "codepoints"
-  | "radicals"
   | "strokeCounts"
   | "variants"
   | "radNames"
   | "dicRefs"
   | "queryCodes"
-  | "readingMeanings"
+  | "readings"
+  | "meanings"
   | "nanori"
->;
+> & {
+  codepoints: Partial<Character["codepoints"]>;
+  radicals: Partial<Character["radicals"]>;
+};
 
 const START_TEXT = "<kanjidic2>";
 
 function makeBaseCharacter(): BaseCharacter {
   return {
-    codepoints: {
-      jis208: [],
-      jis212: [],
-      jis213: [],
-      ucs: []
-    },
-    radicals: {
-      classical: [],
-      nelson_c: []
-    },
+    codepoints: {},
+    radicals: {},
     strokeCounts: [],
     variants: {
       jis208: [],
@@ -72,16 +66,8 @@ function makeBaseCharacter(): BaseCharacter {
       sh_desc: [],
       four_corner: [],
       deroo: [],
-      misclass: [],
       skip: []
     },
-    readingMeanings: [],
-    nanori: []
-  };
-}
-
-function makeRmgroup(): Rmgroup {
-  return {
     readings: {
       pinyin: [],
       korean_r: [],
@@ -90,7 +76,8 @@ function makeRmgroup(): Rmgroup {
       ja_on: [],
       ja_kun: []
     },
-    meanings: {}
+    meanings: {},
+    nanori: []
   };
 }
 
@@ -98,7 +85,6 @@ export class Parser extends Transform {
   private readonly sax: SAXParser;
   private currentCharacter: Partial<Character> &
     BaseCharacter = makeBaseCharacter();
-  private currentRmgroup: Rmgroup = makeRmgroup();
   private startBuffer?: string = "";
 
   public constructor() {
@@ -123,10 +109,7 @@ export class Parser extends Transform {
       );
     };
     saxParser.onclosetag = (tagName): void => {
-      if (tagName === "rmgroup") {
-        this.currentCharacter.readingMeanings.push(this.currentRmgroup);
-        this.currentRmgroup = makeRmgroup();
-      } else if (tagName === "character") {
+      if (tagName === "character") {
         this.push(this.currentCharacter);
         this.currentCharacter = makeBaseCharacter();
       }
@@ -171,12 +154,12 @@ export class Parser extends Transform {
       case "cp_value":
         this.currentCharacter.codepoints[
           attr.cp_type as keyof Character["codepoints"]
-        ].push(text);
+        ] = text;
         break;
       case "rad_value":
         this.currentCharacter.radicals[
           attr.rad_type as keyof Character["radicals"]
-        ].push(+text);
+        ] = +text;
         break;
       case "grade":
         this.currentCharacter.grade = +text;
@@ -205,8 +188,8 @@ export class Parser extends Transform {
         this.handleQCode(attr, text);
         break;
       case "reading":
-        this.currentRmgroup.readings[
-          attr.r_type as keyof Rmgroup["readings"]
+        this.currentCharacter.readings[
+          attr.r_type as keyof Character["readings"]
         ].push(text);
         break;
       case "meaning":
@@ -244,9 +227,9 @@ export class Parser extends Transform {
   }
 
   private handleMeaning(lang: string, text: string): void {
-    if (this.currentRmgroup.meanings[lang] === undefined) {
-      this.currentRmgroup.meanings[lang] = [];
+    if (this.currentCharacter.meanings[lang] === undefined) {
+      this.currentCharacter.meanings[lang] = [];
     }
-    this.currentRmgroup.meanings[lang].push(text);
+    this.currentCharacter.meanings[lang].push(text);
   }
 }

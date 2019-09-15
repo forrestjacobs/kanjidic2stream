@@ -19,13 +19,62 @@ const START_TEXT = "<kanjidic2>";
 
 function makeBaseCharacter(): BaseCharacter {
   return {
-    codepoints: [],
-    radicals: [],
+    codepoints: {
+      jis208: [],
+      jis212: [],
+      jis213: [],
+      ucs: []
+    },
+    radicals: {
+      classical: [],
+      nelson_c: []
+    },
     strokeCounts: [],
-    variants: [],
+    variants: {
+      jis208: [],
+      jis212: [],
+      jis213: [],
+      deroo: [],
+      njecd: [],
+      s_h: [],
+      nelson_c: [],
+      oneill: [],
+      ucs: []
+    },
     radNames: [],
-    dicNumbers: [],
-    queryCodes: [],
+    dicNumbers: {
+      nelson_c: [],
+      nelson_n: [],
+      halpern_njecd: [],
+      halpern_kkd: [],
+      halpern_kkld: [],
+      halpern_kkld_2ed: [],
+      heisig: [],
+      heisig6: [],
+      gakken: [],
+      oneill_names: [],
+      oneill_kk: [],
+      henshall: [],
+      sh_kk: [],
+      sh_kk2: [],
+      sakade: [],
+      jf_cards: [],
+      henshall3: [],
+      tutt_cards: [],
+      crowley: [],
+      kanji_in_context: [],
+      busy_people: [],
+      kodansha_compact: [],
+      maniette: [],
+      moro: []
+    },
+    queryCodes: {
+      sh_desc: [],
+      four_corner: [],
+      deroo: [],
+      misclass: [],
+      skip: []
+    },
     readingMeanings: [],
     nanori: []
   };
@@ -33,8 +82,15 @@ function makeBaseCharacter(): BaseCharacter {
 
 function makeRmgroup(): Rmgroup {
   return {
-    readings: [],
-    meanings: []
+    readings: {
+      pinyin: [],
+      korean_r: [],
+      korean_h: [],
+      vietnam: [],
+      ja_on: [],
+      ja_kun: []
+    },
+    meanings: {}
   };
 }
 
@@ -131,23 +187,25 @@ export class Parser extends Transform {
         this.currentCharacter.nanori.push(text);
         break;
       case "rad_value":
-        this.currentCharacter.radicals.push({
-          type: attr.rad_type,
-          value: +text
-        });
+        this.currentCharacter.radicals[
+          attr.rad_type as keyof Character["radicals"]
+        ].push(+text);
         break;
       case "reading":
-        this.currentRmgroup.readings.push({
-          type: attr.r_type,
-          value: text
-        });
+        this.currentRmgroup.readings[
+          attr.r_type as keyof Rmgroup["readings"]
+        ].push(text);
         break;
       case "meaning":
-        this.currentRmgroup.meanings.push({
-          lang: attr.m_lang,
-          value: text
-        });
+        this.handleMeaning(attr.m_lang || "en", text);
         break;
     }
+  }
+
+  private handleMeaning(lang: string, text: string): void {
+    if (this.currentRmgroup.meanings[lang] === undefined) {
+      this.currentRmgroup.meanings[lang] = [];
+    }
+    this.currentRmgroup.meanings[lang].push(text);
   }
 }

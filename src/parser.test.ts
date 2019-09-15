@@ -1,13 +1,62 @@
 import { Parser } from "./parser";
 
 const BASE_CHARACTER = {
-  codepoints: [],
-  radicals: [],
+  codepoints: {
+    jis208: [],
+    jis212: [],
+    jis213: [],
+    ucs: []
+  },
+  radicals: {
+    classical: [],
+    nelson_c: []
+  },
   strokeCounts: [],
-  variants: [],
+  variants: {
+    jis208: [],
+    jis212: [],
+    jis213: [],
+    deroo: [],
+    njecd: [],
+    s_h: [],
+    nelson_c: [],
+    oneill: [],
+    ucs: []
+  },
   radNames: [],
-  dicNumbers: [],
-  queryCodes: [],
+  dicNumbers: {
+    nelson_c: [],
+    nelson_n: [],
+    halpern_njecd: [],
+    halpern_kkd: [],
+    halpern_kkld: [],
+    halpern_kkld_2ed: [],
+    heisig: [],
+    heisig6: [],
+    gakken: [],
+    oneill_names: [],
+    oneill_kk: [],
+    henshall: [],
+    sh_kk: [],
+    sh_kk2: [],
+    sakade: [],
+    jf_cards: [],
+    henshall3: [],
+    tutt_cards: [],
+    crowley: [],
+    kanji_in_context: [],
+    busy_people: [],
+    kodansha_compact: [],
+    maniette: [],
+    moro: []
+  },
+  queryCodes: {
+    sh_desc: [],
+    four_corner: [],
+    deroo: [],
+    misclass: [],
+    skip: []
+  },
   readingMeanings: [],
   nanori: []
 };
@@ -85,12 +134,10 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "亜",
-      radicals: [
-        {
-          type: "classical",
-          value: 7
-        }
-      ]
+      radicals: {
+        classical: [7],
+        nelson_c: []
+      }
     });
   });
 
@@ -110,16 +157,10 @@ describe("Parser", () => {
     expect(dataHandler).toHaveBeenCalledWith({
       ...BASE_CHARACTER,
       literal: "応",
-      radicals: [
-        {
-          type: "classical",
-          value: 61
-        },
-        {
-          type: "nelson_c",
-          value: 53
-        }
-      ]
+      radicals: {
+        classical: [61],
+        nelson_c: [53]
+      }
     });
   });
 
@@ -218,18 +259,17 @@ describe("Parser", () => {
       literal: "决",
       readingMeanings: [
         {
-          readings: [
-            { type: "ja_on", "value": "ケチ" },
-            { type: "ja_on", "value": "ケツ" },
-            { type: "ja_kun", "value": "き.める" },
-            { type: "ja_kun", "value": "き.まる" },
-            { type: "ja_kun", "value": "さ.く" }
-         ],
-          meanings: [
-            { value: "decide" },
-            { value: "determine" },
-            { value: "judge" }
-          ]
+          readings: {
+            pinyin: [],
+            korean_r: [],
+            korean_h: [],
+            vietnam: [],
+            ja_on: ["ケチ", "ケツ"],
+            ja_kun: ["き.める", "き.まる", "さ.く"]
+          },
+          meanings: {
+            en: ["decide", "determine", "judge"]
+          }
         }
       ]
     });

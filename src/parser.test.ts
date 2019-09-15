@@ -24,7 +24,7 @@ const BASE_CHARACTER = {
     ucs: []
   },
   radNames: [],
-  dicNumbers: {
+  dicRefs: {
     nelson_c: [],
     nelson_n: [],
     halpern_njecd: [],

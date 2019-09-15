@@ -1,6 +1,12 @@
-export interface Element<Type = string, Value = string> {
-  type: Type;
-  value: Value;
+export interface MoroDicRef {
+  vol: string;
+  page: string;
+  value: string;
+}
+
+export interface SkipQueryCode {
+  misclass: "posn" | "stroke_count" | "stroke_and_posn" | "storoke_diff";
+  value: string;
 }
 
 export interface Rmgroup {
@@ -46,7 +52,7 @@ export interface Character {
   radNames: string[];
   jlpt?: number;
 
-  dicNumbers: {
+  dicRefs: {
     [type in
       | "nelson_c"
       | "nelson_n"
@@ -72,16 +78,13 @@ export interface Character {
       | "kodansha_compact"
       | "maniette"]: string[];
   } & {
-    moro: { vol: string; page: string; value: string }[];
+    moro: MoroDicRef[];
   };
 
   queryCodes: {
     [type in "sh_desc" | "four_corner" | "deroo" | "misclass"]: string[];
   } & {
-    skip: {
-      misclass: "posn" | "stroke_count" | "stroke_and_posn" | "storoke_diff";
-      value: string;
-    }[];
+    skip: SkipQueryCode[];
   };
 
   readingMeanings: Rmgroup[];

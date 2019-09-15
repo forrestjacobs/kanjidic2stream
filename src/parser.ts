@@ -1,6 +1,6 @@
-import { parser, QualifiedTag, SAXParser, Tag } from "sax";
+import { parser, SAXParser, Tag } from "sax";
 import { Transform } from "stream";
-import { Character, Rmgroup } from "./character";
+import { Character, Rmgroup, SkipQueryCode } from "./character";
 
 type BaseCharacter = Pick<
   Character,
@@ -9,7 +9,7 @@ type BaseCharacter = Pick<
   | "strokeCounts"
   | "variants"
   | "radNames"
-  | "dicNumbers"
+  | "dicRefs"
   | "queryCodes"
   | "readingMeanings"
   | "nanori"
@@ -42,7 +42,7 @@ function makeBaseCharacter(): BaseCharacter {
       ucs: []
     },
     radNames: [],
-    dicNumbers: {
+    dicRefs: {
       nelson_c: [],
       nelson_n: [],
       halpern_njecd: [],
@@ -107,13 +107,13 @@ export class Parser extends Transform {
     const saxParser = parser(false, { trim: true, lowercase: true });
     this.sax = saxParser;
 
-    let currentNode: Tag | QualifiedTag;
+    let currentNode: Tag;
 
     saxParser.onerror = (error): void => {
       this.emit("error", error);
     };
     saxParser.onopentag = (node): void => {
-      currentNode = node;
+      currentNode = node as Tag;
     };
     saxParser.ontext = (text): void => {
       this.updateCharacterFromElement(
@@ -161,35 +161,48 @@ export class Parser extends Transform {
 
   private updateCharacterFromElement(
     name: string,
-    attr: any,
+    attr: Tag["attributes"],
     text: string
   ): void {
     switch (name) {
       case "literal":
         this.currentCharacter.literal = text;
         break;
-      case "grade":
-        this.currentCharacter.grade = +text;
-        break;
-      case "freq":
-        this.currentCharacter.freq = +text;
-        break;
-      case "jlpt":
-        this.currentCharacter.jlpt = +text;
-        break;
-      case "stroke_count":
-        this.currentCharacter.strokeCounts.push(+text);
-        break;
-      case "rad_name":
-        this.currentCharacter.radNames.push(text);
-        break;
-      case "nanori":
-        this.currentCharacter.nanori.push(text);
+      case "cp_value":
+        this.currentCharacter.codepoints[
+          attr.cp_type as keyof Character["codepoints"]
+        ].push(text);
         break;
       case "rad_value":
         this.currentCharacter.radicals[
           attr.rad_type as keyof Character["radicals"]
         ].push(+text);
+        break;
+      case "grade":
+        this.currentCharacter.grade = +text;
+        break;
+      case "stroke_count":
+        this.currentCharacter.strokeCounts.push(+text);
+        break;
+      case "variant":
+        this.currentCharacter.variants[
+          attr.var_type as keyof Character["variants"]
+        ].push(text);
+        break;
+      case "freq":
+        this.currentCharacter.freq = +text;
+        break;
+      case "rad_name":
+        this.currentCharacter.radNames.push(text);
+        break;
+      case "jlpt":
+        this.currentCharacter.jlpt = +text;
+        break;
+      case "dic_ref":
+        this.handleDicRef(attr, text);
+        break;
+      case "q_code":
+        this.handleQCode(attr, text);
         break;
       case "reading":
         this.currentRmgroup.readings[
@@ -199,6 +212,34 @@ export class Parser extends Transform {
       case "meaning":
         this.handleMeaning(attr.m_lang || "en", text);
         break;
+      case "nanori":
+        this.currentCharacter.nanori.push(text);
+        break;
+    }
+  }
+
+  private handleDicRef(attr: Tag["attributes"], text: string): void {
+    const type = attr.dr_type as keyof Character["dicRefs"];
+    if (type === "moro") {
+      this.currentCharacter.dicRefs.moro.push({
+        vol: attr.m_vol,
+        page: attr.m_page,
+        value: text
+      });
+    } else {
+      this.currentCharacter.dicRefs[type].push(text);
+    }
+  }
+
+  private handleQCode(attr: Tag["attributes"], text: string): void {
+    const type = attr.qc_type as keyof Character["queryCodes"];
+    if (type === "skip") {
+      this.currentCharacter.queryCodes.skip.push({
+        misclass: attr.skip_misclass as SkipQueryCode["misclass"],
+        value: text
+      });
+    } else {
+      this.currentCharacter.queryCodes[type].push(text);
     }
   }
 

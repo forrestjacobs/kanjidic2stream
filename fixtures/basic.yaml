@@ -1,0 +1,182 @@
+name: parses a minimal kanjidic2 doc
+xml:
+  - <kanjidic2>
+  - <character><literal>日</literal></character>
+  - </kanjidic2>
+characters:
+  - literal: 日
+
+---
+
+name: ignores everything before <kanjidic2>
+xml:
+  - Ye_u0MZ{]a%p9ratB]/' <ka
+  - njidi
+  - c2><character><literal>日</literal></character></kanjidic2>
+characters:
+  -  literal: 日
+
+---
+
+name: parses multiple characters
+xml:
+  - <kanjidic2>
+  - <character><literal>一</literal></character>
+  - <character><literal>二</literal></character>
+  - </kanjidic2>
+characters:
+  - literal: 一
+  - literal: 二
+
+---
+
+name: parses a radical
+xml:
+  - |
+      <kanjidic2>
+        <character>
+          <literal>亜</literal>
+          <radical>
+            <rad_value rad_type="classical">7</rad_value>
+          </radical>
+        </character>
+      </kanjidic2>
+characters:
+  - literal: 亜
+    radicals:
+      classical: 7
+
+---
+
+name: parses classical and nelson radicals
+xml:
+  - |
+      <kanjidic2>
+        <character>
+          <literal>応</literal>
+          <radical>
+            <rad_value rad_type="classical">61</rad_value>
+            <rad_value rad_type="nelson_c">53</rad_value>
+          </radical>
+        </character>
+      </kanjidic2>
+characters:
+  - literal: 応
+    radicals:
+      classical: 61
+      nelson_c: 53
+
+---
+
+name: parses meta
+xml:
+  - |
+      <kanjidic2>
+        <character>
+          <literal>哀</literal>
+          <misc>
+            <grade>8</grade>
+            <stroke_count>9</stroke_count>
+            <freq>1715</freq>
+            <jlpt>1</jlpt>
+          </misc>
+        </character>
+      </kanjidic2>
+characters:
+  - literal: 哀
+    grade: 8
+    strokeCounts: [9]
+    freq: 1715
+    jlpt: 1
+
+---
+
+name: parses multi-stroke counts
+xml:
+  - |
+      <kanjidic2>
+        <character>
+          <literal>飴</literal>
+          <misc>
+            <stroke_count>13</stroke_count>
+            <stroke_count>14</stroke_count>
+          </misc>
+        </character>
+      </kanjidic2>
+characters:
+  - literal: 飴
+    strokeCounts: [13, 14]
+
+---
+
+name: parses radical names
+xml:
+  - |
+      <kanjidic2>
+        <character>
+          <literal>冂</literal>
+          <misc>
+            <stroke_count>2</stroke_count>
+            <rad_name>まきがまえ</rad_name>
+            <rad_name>えながまえ</rad_name>
+            <rad_name>どうがまえ</rad_name>
+            <rad_name>けいがまえ</rad_name>
+          </misc>
+        </character>
+      </kanjidic2>
+characters:
+  - literal: 冂
+    strokeCounts: [2]
+    radNames: [まきがまえ, えながまえ, どうがまえ, けいがまえ]
+
+---
+
+name: parses rm groups
+xml:
+  - |
+      <kanjidic2>
+        <character>
+          <literal>决</literal>
+          <reading_meaning>
+            <rmgroup>
+              <reading r_type="ja_on">ケチ</reading>
+              <reading r_type="ja_on">ケツ</reading>
+              <reading r_type="ja_kun">き.める</reading>
+              <reading r_type="ja_kun">き.まる</reading>
+              <reading r_type="ja_kun">さ.く</reading>
+              <meaning>decide</meaning>
+              <meaning>determine</meaning>
+              <meaning>judge</meaning>
+            </rmgroup>
+          </reading_meaning>
+        </character>
+      </kanjidic2>
+characters:
+  - literal: 决
+    readings:
+      pinyin: []
+      korean_r: []
+      korean_h: []
+      vietnam: []
+      ja_on: [ケチ, ケツ]
+      ja_kun: [き.める, き.まる, さ.く]
+    meanings:
+      en: [decide, determine, judge]
+
+---
+
+name: parses nanori
+xml:
+  - |
+      <kanjidic2>
+        <character>
+          <literal>咸</literal>
+          <reading_meaning>
+            <nanori>みな</nanori>
+            <nanori>しげ</nanori>
+          </reading_meaning>
+        </character>
+      </kanjidic2>
+characters:
+  - literal: 咸
+    nanori: [みな, しげ]

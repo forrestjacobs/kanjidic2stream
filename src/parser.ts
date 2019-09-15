@@ -81,6 +81,78 @@ function makeBaseCharacter(): BaseCharacter {
   };
 }
 
+const elementHandlers: {
+  [name: string]: (
+    acc: Partial<Character> & BaseCharacter,
+    text: string,
+    attr: Tag["attributes"]
+  ) => void;
+} = {
+  literal: (acc, text) => {
+    acc.literal = text;
+  },
+  cp_value: (acc, text, attr) => {
+    acc.codepoints[attr.cp_type as keyof Character["codepoints"]] = text;
+  },
+  rad_value: (acc, text, attr) => {
+    acc.radicals[attr.rad_type as keyof Character["radicals"]] = +text;
+  },
+  grade: (acc, text) => {
+    acc.grade = +text;
+  },
+  stroke_count: (acc, text) => {
+    acc.strokeCounts.push(+text);
+  },
+  variant: (acc, text, attr) => {
+    acc.variants[attr.var_type as keyof Character["variants"]].push(text);
+  },
+  freq: (acc, text) => {
+    acc.freq = +text;
+  },
+  rad_name: (acc, text) => {
+    acc.radNames.push(text);
+  },
+  jlpt: (acc, text) => {
+    acc.jlpt = +text;
+  },
+  dic_ref: (acc, text, attr) => {
+    const type = attr.dr_type as keyof Character["dicRefs"];
+    if (type === "moro") {
+      acc.dicRefs.moro.push({
+        vol: attr.m_vol,
+        page: attr.m_page,
+        value: text
+      });
+    } else {
+      acc.dicRefs[type].push(text);
+    }
+  },
+  q_code: (acc, text, attr) => {
+    const type = attr.qc_type as keyof Character["queryCodes"];
+    if (type === "skip") {
+      acc.queryCodes.skip.push({
+        misclass: attr.skip_misclass as SkipQueryCode["misclass"],
+        value: text
+      });
+    } else {
+      acc.queryCodes[type].push(text);
+    }
+  },
+  reading: (acc, text, attr) => {
+    acc.readings[attr.r_type as keyof Character["readings"]].push(text);
+  },
+  meaning: (acc, text, attr) => {
+    const lang = attr.m_lang || "en";
+    if (acc.meanings[lang] === undefined) {
+      acc.meanings[lang] = [];
+    }
+    acc.meanings[lang].push(text);
+  },
+  nanori: (acc, text) => {
+    acc.nanori.push(text);
+  }
+};
+
 export class Parser extends Transform {
   private readonly sax: SAXParser;
   private currentCharacter: Partial<Character> &
@@ -102,10 +174,10 @@ export class Parser extends Transform {
       currentNode = node as Tag;
     };
     saxParser.ontext = (text): void => {
-      this.updateCharacterFromElement(
-        currentNode.name,
-        currentNode.attributes,
-        text
+      elementHandlers[currentNode.name](
+        this.currentCharacter,
+        text,
+        currentNode.attributes
       );
     };
     saxParser.onclosetag = (tagName): void => {
@@ -140,96 +212,5 @@ export class Parser extends Transform {
   public _flush(callback: (error?: Error, data?: unknown) => void): void {
     this.sax.close();
     callback();
-  }
-
-  private updateCharacterFromElement(
-    name: string,
-    attr: Tag["attributes"],
-    text: string
-  ): void {
-    switch (name) {
-      case "literal":
-        this.currentCharacter.literal = text;
-        break;
-      case "cp_value":
-        this.currentCharacter.codepoints[
-          attr.cp_type as keyof Character["codepoints"]
-        ] = text;
-        break;
-      case "rad_value":
-        this.currentCharacter.radicals[
-          attr.rad_type as keyof Character["radicals"]
-        ] = +text;
-        break;
-      case "grade":
-        this.currentCharacter.grade = +text;
-        break;
-      case "stroke_count":
-        this.currentCharacter.strokeCounts.push(+text);
-        break;
-      case "variant":
-        this.currentCharacter.variants[
-          attr.var_type as keyof Character["variants"]
-        ].push(text);
-        break;
-      case "freq":
-        this.currentCharacter.freq = +text;
-        break;
-      case "rad_name":
-        this.currentCharacter.radNames.push(text);
-        break;
-      case "jlpt":
-        this.currentCharacter.jlpt = +text;
-        break;
-      case "dic_ref":
-        this.handleDicRef(attr, text);
-        break;
-      case "q_code":
-        this.handleQCode(attr, text);
-        break;
-      case "reading":
-        this.currentCharacter.readings[
-          attr.r_type as keyof Character["readings"]
-        ].push(text);
-        break;
-      case "meaning":
-        this.handleMeaning(attr.m_lang || "en", text);
-        break;
-      case "nanori":
-        this.currentCharacter.nanori.push(text);
-        break;
-    }
-  }
-
-  private handleDicRef(attr: Tag["attributes"], text: string): void {
-    const type = attr.dr_type as keyof Character["dicRefs"];
-    if (type === "moro") {
-      this.currentCharacter.dicRefs.moro.push({
-        vol: attr.m_vol,
-        page: attr.m_page,
-        value: text
-      });
-    } else {
-      this.currentCharacter.dicRefs[type].push(text);
-    }
-  }
-
-  private handleQCode(attr: Tag["attributes"], text: string): void {
-    const type = attr.qc_type as keyof Character["queryCodes"];
-    if (type === "skip") {
-      this.currentCharacter.queryCodes.skip.push({
-        misclass: attr.skip_misclass as SkipQueryCode["misclass"],
-        value: text
-      });
-    } else {
-      this.currentCharacter.queryCodes[type].push(text);
-    }
-  }
-
-  private handleMeaning(lang: string, text: string): void {
-    if (this.currentCharacter.meanings[lang] === undefined) {
-      this.currentCharacter.meanings[lang] = [];
-    }
-    this.currentCharacter.meanings[lang].push(text);
   }
 }

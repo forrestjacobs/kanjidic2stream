@@ -1,65 +1,59 @@
 name: parses a minimal kanjidic2 doc
-xml:
-  - <kanjidic2>
-  - <character><literal>日</literal></character>
-  - </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character><literal>日</literal></character>
+  </kanjidic2>
 characters:
   - literal: 日
 
 ---
-
 name: ignores everything before <kanjidic2>
 xml:
   - Ye_u0MZ{]a%p9ratB]/' <ka
   - njidi
   - c2><character><literal>日</literal></character></kanjidic2>
 characters:
-  -  literal: 日
+  - literal: 日
 
 ---
-
 name: parses multiple characters
-xml:
-  - <kanjidic2>
-  - <character><literal>一</literal></character>
-  - <character><literal>二</literal></character>
-  - </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character><literal>一</literal></character>
+    <character><literal>二</literal></character>
+  </kanjidic2>
 characters:
   - literal: 一
   - literal: 二
 
 ---
-
 name: parses a radical
-xml:
-  - |
-      <kanjidic2>
-        <character>
-          <literal>亜</literal>
-          <radical>
-            <rad_value rad_type="classical">7</rad_value>
-          </radical>
-        </character>
-      </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>亜</literal>
+      <radical>
+        <rad_value rad_type="classical">7</rad_value>
+      </radical>
+    </character>
+  </kanjidic2>
 characters:
   - literal: 亜
     radicals:
       classical: 7
 
 ---
-
 name: parses classical and nelson radicals
-xml:
-  - |
-      <kanjidic2>
-        <character>
-          <literal>応</literal>
-          <radical>
-            <rad_value rad_type="classical">61</rad_value>
-            <rad_value rad_type="nelson_c">53</rad_value>
-          </radical>
-        </character>
-      </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>応</literal>
+      <radical>
+        <rad_value rad_type="classical">61</rad_value>
+        <rad_value rad_type="nelson_c">53</rad_value>
+      </radical>
+    </character>
+  </kanjidic2>
 characters:
   - literal: 応
     radicals:
@@ -67,21 +61,19 @@ characters:
       nelson_c: 53
 
 ---
-
 name: parses meta
-xml:
-  - |
-      <kanjidic2>
-        <character>
-          <literal>哀</literal>
-          <misc>
-            <grade>8</grade>
-            <stroke_count>9</stroke_count>
-            <freq>1715</freq>
-            <jlpt>1</jlpt>
-          </misc>
-        </character>
-      </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>哀</literal>
+      <misc>
+        <grade>8</grade>
+        <stroke_count>9</stroke_count>
+        <freq>1715</freq>
+        <jlpt>1</jlpt>
+      </misc>
+    </character>
+  </kanjidic2>
 characters:
   - literal: 哀
     grade: 8
@@ -90,93 +82,102 @@ characters:
     jlpt: 1
 
 ---
-
 name: parses multi-stroke counts
-xml:
-  - |
-      <kanjidic2>
-        <character>
-          <literal>飴</literal>
-          <misc>
-            <stroke_count>13</stroke_count>
-            <stroke_count>14</stroke_count>
-          </misc>
-        </character>
-      </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>飴</literal>
+      <misc>
+        <stroke_count>13</stroke_count>
+        <stroke_count>14</stroke_count>
+      </misc>
+    </character>
+  </kanjidic2>
 characters:
   - literal: 飴
     strokeCounts: [13, 14]
 
 ---
-
 name: parses radical names
-xml:
-  - |
-      <kanjidic2>
-        <character>
-          <literal>冂</literal>
-          <misc>
-            <stroke_count>2</stroke_count>
-            <rad_name>まきがまえ</rad_name>
-            <rad_name>えながまえ</rad_name>
-            <rad_name>どうがまえ</rad_name>
-            <rad_name>けいがまえ</rad_name>
-          </misc>
-        </character>
-      </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>冂</literal>
+      <misc>
+        <stroke_count>2</stroke_count>
+        <rad_name>まきがまえ</rad_name>
+        <rad_name>えながまえ</rad_name>
+        <rad_name>どうがまえ</rad_name>
+        <rad_name>けいがまえ</rad_name>
+      </misc>
+    </character>
+  </kanjidic2>
 characters:
   - literal: 冂
     strokeCounts: [2]
     radNames: [まきがまえ, えながまえ, どうがまえ, けいがまえ]
 
 ---
-
 name: parses rm groups
-xml:
-  - |
-      <kanjidic2>
-        <character>
-          <literal>决</literal>
-          <reading_meaning>
-            <rmgroup>
-              <reading r_type="ja_on">ケチ</reading>
-              <reading r_type="ja_on">ケツ</reading>
-              <reading r_type="ja_kun">き.める</reading>
-              <reading r_type="ja_kun">き.まる</reading>
-              <reading r_type="ja_kun">さ.く</reading>
-              <meaning>decide</meaning>
-              <meaning>determine</meaning>
-              <meaning>judge</meaning>
-            </rmgroup>
-          </reading_meaning>
-        </character>
-      </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>亜</literal>
+      <reading_meaning>
+        <rmgroup>
+          <reading r_type="pinyin">ya4</reading>
+          <reading r_type="korean_r">a</reading>
+          <reading r_type="korean_h">아</reading>
+          <reading r_type="vietnam">A</reading>
+          <reading r_type="vietnam">Á</reading>
+          <reading r_type="ja_on">ア</reading>
+          <reading r_type="ja_kun">つ.ぐ</reading>
+          <meaning>Asia</meaning>
+          <meaning>rank next</meaning>
+          <meaning>come after</meaning>
+          <meaning>-ous</meaning>
+          <meaning m_lang="fr">Asie</meaning>
+          <meaning m_lang="fr">suivant</meaning>
+          <meaning m_lang="fr">sub-</meaning>
+          <meaning m_lang="fr">sous-</meaning>
+          <meaning m_lang="es">pref. para indicar</meaning>
+          <meaning m_lang="es">venir después de</meaning>
+          <meaning m_lang="es">Asia</meaning>
+          <meaning m_lang="pt">Ásia</meaning>
+          <meaning m_lang="pt">próxima</meaning>
+          <meaning m_lang="pt">o que vem depois</meaning>
+          <meaning m_lang="pt">-ous</meaning>
+        </rmgroup>
+      </reading_meaning>
+    </character>
+  </kanjidic2>
 characters:
-  - literal: 决
+  - literal: 亜
     readings:
-      pinyin: []
-      korean_r: []
-      korean_h: []
-      vietnam: []
-      ja_on: [ケチ, ケツ]
-      ja_kun: [き.める, き.まる, さ.く]
+      pinyin: [ya4]
+      korean_r: [a]
+      korean_h: [아]
+      vietnam: [A, Á]
+      ja_on: [ア]
+      ja_kun: [つ.ぐ]
     meanings:
-      en: [decide, determine, judge]
+      en: [Asia, rank next, come after, -ous]
+      fr: [Asie, suivant, sub-, sous-]
+      es: [pref. para indicar, venir después de, Asia]
+      pt: [Ásia, próxima, o que vem depois, -ous]
 
 ---
-
 name: parses nanori
-xml:
-  - |
-      <kanjidic2>
-        <character>
-          <literal>咸</literal>
-          <reading_meaning>
-            <nanori>みな</nanori>
-            <nanori>しげ</nanori>
-          </reading_meaning>
-        </character>
-      </kanjidic2>
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>咸</literal>
+      <reading_meaning>
+        <nanori>みな</nanori>
+        <nanori>しげ</nanori>
+      </reading_meaning>
+    </character>
+  </kanjidic2>
 characters:
   - literal: 咸
     nanori: [みな, しげ]

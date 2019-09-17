@@ -82,8 +82,12 @@ describe.each(FIXTURES)("%s", filename => {
     parser.on("data", character => actualCharacters.push(character));
     parser.on("error", errorCallback);
 
-    for (const part of xml) {
-      parser.write(part);
+    if (typeof xml === "string") {
+      parser.write(xml);
+    } else {
+      for (const part of xml) {
+        parser.write(part);
+      }
     }
     parser.end();
 

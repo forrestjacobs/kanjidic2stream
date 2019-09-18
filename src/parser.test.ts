@@ -91,7 +91,7 @@ describe.each(FIXTURES)("%s", filename => {
     }
     parser.end();
 
-    expect(actualCharacters).toMatchObject(
+    expect(actualCharacters).toStrictEqual(
       characters.map((c: Partial<Character>) => ({ ...BASE_CHARACTER, ...c }))
     );
     expect(errorCallback).toHaveBeenCalledTimes(0);

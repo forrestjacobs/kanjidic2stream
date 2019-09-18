@@ -130,10 +130,11 @@ const elementHandlers: {
   q_code: (acc, text, attr) => {
     const type = attr.qc_type as keyof Character["queryCodes"];
     if (type === "skip") {
-      acc.queryCodes.skip.push({
-        misclass: attr.skip_misclass as SkipQueryCode["misclass"],
-        value: text
-      });
+      const skipCode: SkipQueryCode = { value: text };
+      if (attr.skip_misclass !== undefined) {
+        skipCode.misclass = attr.skip_misclass as SkipQueryCode["misclass"];
+      }
+      acc.queryCodes.skip.push(skipCode);
     } else {
       acc.queryCodes[type].push(text);
     }

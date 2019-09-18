@@ -5,7 +5,7 @@ export interface MoroDicRef {
 }
 
 export interface SkipQueryCode {
-  misclass: "posn" | "stroke_count" | "stroke_and_posn" | "storoke_diff";
+  misclass?: "posn" | "stroke_count" | "stroke_and_posn" | "storoke_diff";
   value: string;
 }
 

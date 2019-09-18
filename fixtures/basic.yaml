@@ -1,8 +1,8 @@
 name: parses a minimal kanjidic2 doc
-xml: |
-  <kanjidic2>
-    <character><literal>日</literal></character>
-  </kanjidic2>
+xml:
+  - <kanjidic2>
+  - <character><literal>日</literal></character>
+  - </kanjidic2>
 characters:
   - literal: 日
 
@@ -25,6 +25,26 @@ xml: |
 characters:
   - literal: 一
   - literal: 二
+
+---
+name: parses codepoints
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>丂</literal>
+      <codepoint>
+        <cp_value cp_type="ucs">4e02</cp_value>
+        <cp_value cp_type="jis212">16-01</cp_value>
+        <cp_value cp_type="jis213">2-01-02</cp_value>
+      </codepoint>
+    </character>
+  </kanjidic>
+characters:
+  - literal: 丂
+    codepoints:
+      ucs: "4e02"
+      jis212: 16-01
+      jis213: 2-01-02
 
 ---
 name: parses a radical
@@ -116,6 +136,142 @@ characters:
   - literal: 冂
     strokeCounts: [2]
     radNames: [まきがまえ, えながまえ, どうがまえ, けいがまえ]
+
+---
+name: parses variants
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>尓</literal>
+      <misc>
+        <variant var_type="jis208">28-04</variant>
+        <variant var_type="jis212">16-62</variant>
+        <variant var_type="jis212">16-63</variant>
+        <variant var_type="jis212">18-56</variant>
+        <variant var_type="jis212">29-91</variant>
+        <variant var_type="nelson_c">168</variant>
+        <variant var_type="nelson_c">69</variant>
+      </misc>
+    </character>
+  </kanjidic2>
+characters:
+  - literal: 尓
+    variants:
+      deroo: []
+      jis208: ["28-04"]
+      jis212: ["16-62", "16-63", "18-56", "29-91"]
+      jis213: []
+      nelson_c: ["168", "69"]
+      njecd: []
+      oneill: []
+      s_h: []
+      ucs: []
+
+---
+name: parses dictionary references
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>悪</literal>
+      <dic_number>
+        <dic_ref dr_type="nelson_c">62</dic_ref>
+        <dic_ref dr_type="nelson_n">1873</dic_ref>
+        <dic_ref dr_type="halpern_njecd">2745</dic_ref>
+        <dic_ref dr_type="halpern_kkd">3413</dic_ref>
+        <dic_ref dr_type="halpern_kkld">1758</dic_ref>
+        <dic_ref dr_type="halpern_kkld_2ed">2393</dic_ref>
+        <dic_ref dr_type="heisig">1810</dic_ref>
+        <dic_ref dr_type="heisig6">1951</dic_ref>
+        <dic_ref dr_type="gakken">504</dic_ref>
+        <dic_ref dr_type="oneill_names">1483A</dic_ref>
+        <dic_ref dr_type="oneill_kk">804</dic_ref>
+        <dic_ref dr_type="moro" m_vol="4" m_page="1065">10717</dic_ref>
+        <dic_ref dr_type="henshall">222</dic_ref>
+        <dic_ref dr_type="sh_kk">304</dic_ref>
+        <dic_ref dr_type="sh_kk2">304</dic_ref>
+        <dic_ref dr_type="sakade">152</dic_ref>
+        <dic_ref dr_type="jf_cards">175</dic_ref>
+        <dic_ref dr_type="henshall3">241</dic_ref>
+        <dic_ref dr_type="tutt_cards">369</dic_ref>
+        <dic_ref dr_type="crowley">295</dic_ref>
+        <dic_ref dr_type="kanji_in_context">114</dic_ref>
+        <dic_ref dr_type="busy_people">3.14</dic_ref>
+        <dic_ref dr_type="kodansha_compact">785</dic_ref>
+        <dic_ref dr_type="maniette">1828</dic_ref>
+      </dic_number>
+    </character>
+  </kanjidic2>
+characters:
+  - literal: 悪
+    dicRefs:
+      nelson_c: ["62"]
+      nelson_n: ["1873"]
+      halpern_njecd: ["2745"]
+      halpern_kkd: ["3413"]
+      halpern_kkld: ["1758"]
+      halpern_kkld_2ed: ["2393"]
+      heisig: ["1810"]
+      heisig6: ["1951"]
+      gakken: ["504"]
+      oneill_names: ["1483A"]
+      oneill_kk: ["804"]
+      moro:
+        - vol: "4"
+          page: "1065"
+          value: "10717"
+      henshall: ["222"]
+      sh_kk: ["304"]
+      sh_kk2: ["304"]
+      sakade: ["152"]
+      jf_cards: ["175"]
+      henshall3: ["241"]
+      tutt_cards: ["369"]
+      crowley: ["295"]
+      kanji_in_context: ["114"]
+      busy_people: ["3.14"]
+      kodansha_compact: ["785"]
+      maniette: ["1828"]
+
+---
+name: parses query codes
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>乏</literal>
+      <query_code>
+        <q_code qc_type="skip">2-1-3</q_code>
+        <q_code qc_type="sh_desc">0a3.11</q_code>
+        <q_code qc_type="four_corner">2030.7</q_code>
+        <q_code qc_type="deroo">2070</q_code>
+        <q_code qc_type="skip" skip_misclass="posn">2-2-2</q_code>
+        <q_code qc_type="skip" skip_misclass="posn">4-4-4</q_code>
+        <q_code qc_type="skip" skip_misclass="stroke_count">2-1-2</q_code>
+        <q_code qc_type="skip" skip_misclass="stroke_and_posn">2-2-1</q_code>
+        <q_code qc_type="skip" skip_misclass="stroke_and_posn">4-3-4</q_code>
+        <q_code qc_type="skip" skip_misclass="stroke_and_posn">4-5-4</q_code>
+      </query_code>
+    </character>
+  </kanjidic2>
+characters:
+  - literal: 乏
+    queryCodes:
+      skip:
+        - value: 2-1-3
+        - misclass: posn
+          value: 2-2-2
+        - misclass: posn
+          value: 4-4-4
+        - misclass: stroke_count
+          value: 2-1-2
+        - misclass: stroke_and_posn
+          value: 2-2-1
+        - misclass: stroke_and_posn
+          value: 4-3-4
+        - misclass: stroke_and_posn
+          value: 4-5-4
+      sh_desc: ["0a3.11"]
+      four_corner: ["2030.7"]
+      deroo: ["2070"]
 
 ---
 name: parses rm groups

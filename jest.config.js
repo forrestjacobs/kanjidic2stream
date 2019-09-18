@@ -3,8 +3,8 @@ module.exports = {
   collectCoverageFrom: ["src/**/*.ts", "!**/*.{d.ts,.test.ts}"],
   coverageThreshold: {
     global: {
-      branches: 80,
-      functions: 80
+      branches: 100,
+      functions: 100
     }
   },
   preset: "ts-jest",

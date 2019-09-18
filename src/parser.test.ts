@@ -68,6 +68,19 @@ const FIXTURES = readdirSync(FIXTURE_PATH).filter(filename =>
   filename.endsWith(".yaml")
 );
 
+describe("parser", () => {
+  it("handles errors", () => {
+    const errorCallback = jest.fn();
+
+    const parser = new Parser();
+    parser.on("error", errorCallback);
+
+    parser.end("<kanjidic2><bad");
+
+    expect(errorCallback).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe.each(FIXTURES)("%s", filename => {
   const yaml = readFileSync(`${FIXTURE_PATH}/${filename}`, "utf8");
   const documents = safeLoadAll(yaml).map(document => [

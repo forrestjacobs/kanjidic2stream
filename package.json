@@ -16,6 +16,7 @@
     "@types/sax": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",
+    "benchmark": "^2.1.4",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.3.0",
     "prettier": "^1.18.2",

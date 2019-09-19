@@ -6,12 +6,10 @@
   "author": "Forrest Jacobs <forrestjacobs@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@types/jest": "^24.0.18",
-    "jest": "^24.9.0",
-    "js-yaml": "^3.13.1",
     "sax": "^1.2.4"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.18",
     "@types/js-yaml": "^3.12.1",
     "@types/sax": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
@@ -19,6 +17,8 @@
     "benchmark": "^2.1.4",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.3.0",
+    "jest": "^24.9.0",
+    "js-yaml": "^3.13.1",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",

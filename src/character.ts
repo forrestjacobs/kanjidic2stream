@@ -34,7 +34,7 @@ export interface Character {
       | "s_h"
       | "nelson_c"
       | "oneill"
-      | "ucs"]: string[];
+      | "ucs"]?: string[];
   };
 
   freq?: number;
@@ -65,15 +65,15 @@ export interface Character {
       | "kanji_in_context"
       | "busy_people"
       | "kodansha_compact"
-      | "maniette"]: string[];
+      | "maniette"]?: string[];
   } & {
-    moro: MoroDicRef[];
+    moro?: MoroDicRef[];
   };
 
   queryCodes: {
-    [type in "sh_desc" | "four_corner" | "deroo"]: string[];
+    [type in "sh_desc" | "four_corner" | "deroo"]?: string[];
   } & {
-    skip: SkipQueryCode[];
+    skip?: SkipQueryCode[];
   };
 
   readings: {
@@ -83,7 +83,7 @@ export interface Character {
       | "korean_h"
       | "vietnam"
       | "ja_on"
-      | "ja_kun"]: string[];
+      | "ja_kun"]?: string[];
   };
   meanings: {
     [lang: string]: string[];

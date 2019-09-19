@@ -157,15 +157,9 @@ xml: |
 characters:
   - literal: 尓
     variants:
-      deroo: []
       jis208: ["28-04"]
       jis212: ["16-62", "16-63", "18-56", "29-91"]
-      jis213: []
       nelson_c: ["168", "69"]
-      njecd: []
-      oneill: []
-      s_h: []
-      ucs: []
 
 ---
 name: parses dictionary references

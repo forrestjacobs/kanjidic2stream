@@ -24,61 +24,23 @@ function makeBaseCharacter(): BaseCharacter {
     codepoints: {},
     radicals: {},
     strokeCounts: [],
-    variants: {
-      jis208: [],
-      jis212: [],
-      jis213: [],
-      deroo: [],
-      njecd: [],
-      s_h: [],
-      nelson_c: [],
-      oneill: [],
-      ucs: []
-    },
+    variants: {},
     radNames: [],
-    dicRefs: {
-      nelson_c: [],
-      nelson_n: [],
-      halpern_njecd: [],
-      halpern_kkd: [],
-      halpern_kkld: [],
-      halpern_kkld_2ed: [],
-      heisig: [],
-      heisig6: [],
-      gakken: [],
-      oneill_names: [],
-      oneill_kk: [],
-      henshall: [],
-      sh_kk: [],
-      sh_kk2: [],
-      sakade: [],
-      jf_cards: [],
-      henshall3: [],
-      tutt_cards: [],
-      crowley: [],
-      kanji_in_context: [],
-      busy_people: [],
-      kodansha_compact: [],
-      maniette: [],
-      moro: []
-    },
-    queryCodes: {
-      sh_desc: [],
-      four_corner: [],
-      deroo: [],
-      skip: []
-    },
-    readings: {
-      pinyin: [],
-      korean_r: [],
-      korean_h: [],
-      vietnam: [],
-      ja_on: [],
-      ja_kun: []
-    },
+    dicRefs: {},
+    queryCodes: {},
+    readings: {},
     meanings: {},
     nanori: []
   };
+}
+
+function append<V>(target: {[key: string]: V[] | undefined}, key: string, value: V): void {
+  const arr = target[key];
+  if (arr === undefined) {
+    target[key] = [value];
+  } else {
+    arr.push(value);
+  }
 }
 
 const elementHandlers: {
@@ -104,7 +66,7 @@ const elementHandlers: {
     acc.strokeCounts.push(+text);
   },
   variant: (acc, text, attr) => {
-    acc.variants[attr.var_type as keyof Character["variants"]].push(text);
+    append(acc.variants, attr.var_type, text);
   },
   freq: (acc, text) => {
     acc.freq = +text;
@@ -116,31 +78,29 @@ const elementHandlers: {
     acc.jlpt = +text;
   },
   dic_ref: (acc, text, attr) => {
-    const type = attr.dr_type as keyof Character["dicRefs"];
-    if (type === "moro") {
-      acc.dicRefs.moro.push({
+    if (attr.dr_type === "moro") {
+      append(acc.dicRefs, "moro", {
         vol: attr.m_vol,
         page: attr.m_page,
         value: text
       });
     } else {
-      acc.dicRefs[type].push(text);
+      append(acc.dicRefs, attr.dr_type, text);
     }
   },
   q_code: (acc, text, attr) => {
-    const type = attr.qc_type as keyof Character["queryCodes"];
-    if (type === "skip") {
+    if (attr.qc_type === "skip") {
       const skipCode: SkipQueryCode = { value: text };
       if (attr.skip_misclass !== undefined) {
         skipCode.misclass = attr.skip_misclass as SkipQueryCode["misclass"];
       }
-      acc.queryCodes.skip.push(skipCode);
+      append(acc.queryCodes, "skip", skipCode);
     } else {
-      acc.queryCodes[type].push(text);
+      append(acc.queryCodes, attr.qc_type, text);
     }
   },
   reading: (acc, text, attr) => {
-    acc.readings[attr.r_type as keyof Character["readings"]].push(text);
+    append(acc.readings, attr.r_type, text);
   },
   meaning: (acc, text, attr) => {
     const lang = attr.m_lang || "en";

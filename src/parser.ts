@@ -175,11 +175,10 @@ export class Parser extends Transform {
       currentNode = node as Tag;
     };
     saxParser.ontext = (text): void => {
-      elementHandlers[currentNode.name](
-        this.currentCharacter,
-        text,
-        currentNode.attributes
-      );
+      const handler = elementHandlers[currentNode.name];
+      if (handler !== undefined) {
+        handler(this.currentCharacter, text, currentNode.attributes);
+      }
     };
     saxParser.onclosetag = (tagName): void => {
       if (tagName === "character") {

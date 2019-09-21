@@ -7,11 +7,23 @@ characters:
   - literal: 日
 
 ---
-name: ignores everything before <kanjidic2>
-xml:
-  - Ye_u0MZ{]a%p9ratB]/' <ka
-  - njidi
-  - c2><character><literal>日</literal></character></kanjidic2>
+name: Handles DOCTYPE
+xml: |
+  <?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE kanjidic2 [
+    <!-- Blah
+    Blah blah
+    -->
+  <!ELEMENT kanjidic2 (header,character*)>
+  <!ELEMENT character (literal)*>
+  <!ELEMENT literal (#PCDATA)>
+  <!--
+    Blah
+    -->
+  ]>
+  <kanjidic2>
+    <character><literal>日</literal></character>
+  </kanjidic2>
 characters:
   - literal: 日
 
@@ -38,7 +50,7 @@ xml: |
         <cp_value cp_type="jis213">2-01-02</cp_value>
       </codepoint>
     </character>
-  </kanjidic>
+  </kanjidic2>
 characters:
   - literal: 丂
     codepoints:

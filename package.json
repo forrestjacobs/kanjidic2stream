@@ -6,12 +6,12 @@
   "author": "Forrest Jacobs <forrestjacobs@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "sax": "^1.2.4"
+    "@types/node": "^12.7.5",
+    "saxes": "^3.1.11"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "@types/js-yaml": "^3.12.1",
-    "@types/sax": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",
     "benchmark": "^2.1.4",

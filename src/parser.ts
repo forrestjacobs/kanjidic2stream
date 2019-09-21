@@ -1,4 +1,4 @@
-import { parser, SAXParser, Tag } from "sax";
+import { SaxesParser, SaxesTag } from "saxes";
 import { Transform } from "stream";
 import { Character, SkipQueryCode } from "./character";
 
@@ -17,8 +17,6 @@ type BaseCharacter = Pick<
   radicals: Partial<Character["radicals"]>;
 };
 
-const START_TEXT = "<kanjidic2>";
-
 function makeBaseCharacter(): BaseCharacter {
   return {
     codepoints: {},
@@ -34,7 +32,11 @@ function makeBaseCharacter(): BaseCharacter {
   };
 }
 
-function append<V>(target: {[key: string]: V[] | undefined}, key: string, value: V): void {
+function append<V>(
+  target: { [key: string]: V[] | undefined },
+  key: string,
+  value: V
+): void {
   const arr = target[key];
   if (arr === undefined) {
     target[key] = [value];
@@ -47,7 +49,7 @@ const elementHandlers: {
   [name: string]: (
     acc: Partial<Character> & BaseCharacter,
     text: string,
-    attr: Tag["attributes"]
+    attr: Record<string, string>
   ) => void;
 } = {
   literal: (acc, text) => {
@@ -115,33 +117,38 @@ const elementHandlers: {
 };
 
 export class Parser extends Transform {
-  private readonly sax: SAXParser;
+  private readonly sax: SaxesParser;
   private currentCharacter: Partial<Character> &
     BaseCharacter = makeBaseCharacter();
-  private startBuffer?: string = "";
 
   public constructor() {
     super({ readableObjectMode: true });
 
-    const saxParser = parser(false, { trim: true, lowercase: true });
+    const saxParser = new SaxesParser({});
     this.sax = saxParser;
 
-    let currentNode: Tag;
+    let currentNode: SaxesTag;
 
     saxParser.onerror = (error): void => {
       this.emit("error", error);
     };
     saxParser.onopentag = (node): void => {
-      currentNode = node as Tag;
+      currentNode = node;
     };
-    saxParser.ontext = (text): void => {
-      const handler = elementHandlers[currentNode.name];
-      if (handler !== undefined) {
-        handler(this.currentCharacter, text, currentNode.attributes);
+    saxParser.ontext = (t): void => {
+      const text = t.trim();
+      if (text && currentNode) {
+        const handler = elementHandlers[currentNode.name];
+        if (handler !== undefined && text) {
+          handler(this.currentCharacter, text, currentNode.attributes as Record<
+            string,
+            string
+          >);
+        }
       }
     };
-    saxParser.onclosetag = (tagName): void => {
-      if (tagName === "character") {
+    saxParser.onclosetag = ({ name }): void => {
+      if (name === "character") {
         this.push(this.currentCharacter);
         this.currentCharacter = makeBaseCharacter();
       }
@@ -153,19 +160,7 @@ export class Parser extends Transform {
     encoding: string,
     callback: () => void
   ): void {
-    // Ignore everything up until "<kanjidic2>"
-    if (this.startBuffer !== undefined) {
-      const buf: string = this.startBuffer + chunk;
-      const start = buf.indexOf(START_TEXT);
-      if (start === -1) {
-        this.startBuffer = buf.substr(-START_TEXT.length);
-      } else {
-        this.sax.write(buf.substr(start));
-        this.startBuffer = undefined;
-      }
-    } else {
-      this.sax.write(chunk);
-    }
+    this.sax.write(chunk);
     callback();
   }
 

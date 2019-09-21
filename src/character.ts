@@ -91,3 +91,21 @@ export interface Character {
 
   nanori: string[];
 }
+
+export type SparseCharacter = Partial<
+  Omit<Character, "codepoints" | "radicals">
+> &
+  Pick<
+    Character,
+    | "strokeCounts"
+    | "variants"
+    | "radNames"
+    | "dicRefs"
+    | "queryCodes"
+    | "readings"
+    | "meanings"
+    | "nanori"
+  > & {
+    codepoints: Partial<Character["codepoints"]>;
+    radicals: Partial<Character["radicals"]>;
+  };

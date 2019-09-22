@@ -25,10 +25,10 @@ export class Parser extends Transform {
   public constructor() {
     super({ readableObjectMode: true });
 
-    const saxParser = new SaxesParser({});
+    const saxParser = new SaxesParser({ fileName: "kanjidic" });
     this.sax = saxParser;
 
-    let currentNode: SaxesTag;
+    let currentNode = { name: "" } as SaxesTag;
 
     saxParser.onerror = (error): void => {
       this.emit("error", error);
@@ -38,9 +38,9 @@ export class Parser extends Transform {
     };
     saxParser.ontext = (t): void => {
       const text = t.trim();
-      if (text && currentNode) {
+      if (text) {
         const handler = elementHandlers[currentNode.name];
-        if (handler !== undefined && text) {
+        if (handler !== undefined) {
           handler(this.currentCharacter, text, currentNode.attributes as Record<
             string,
             string

@@ -1,9 +1,9 @@
 name: parses a minimal kanjidic2 doc
-xml:
-  - <kanjidic2>
-  - <character><literal>日</literal></character>
-  - </kanjidic2>
-characters:
+xml: |
+  <kanjidic2>
+    <character><literal>日</literal></character>
+  </kanjidic2>
+results:
   - literal: 日
 
 ---
@@ -24,7 +24,7 @@ xml: |
   <kanjidic2>
     <character><literal>日</literal></character>
   </kanjidic2>
-characters:
+results:
   - literal: 日
 
 ---
@@ -34,7 +34,7 @@ xml: |
     <character><literal>一</literal></character>
     <character><literal>二</literal></character>
   </kanjidic2>
-characters:
+results:
   - literal: 一
   - literal: 二
 
@@ -51,7 +51,7 @@ xml: |
       </codepoint>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 丂
     codepoints:
       ucs: "4e02"
@@ -69,7 +69,7 @@ xml: |
       </radical>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 亜
     radicals:
       classical: 7
@@ -86,7 +86,7 @@ xml: |
       </radical>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 応
     radicals:
       classical: 61
@@ -106,7 +106,7 @@ xml: |
       </misc>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 哀
     grade: 8
     strokeCounts: [9]
@@ -125,7 +125,7 @@ xml: |
       </misc>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 飴
     strokeCounts: [13, 14]
 
@@ -144,7 +144,7 @@ xml: |
       </misc>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 冂
     strokeCounts: [2]
     radNames: [まきがまえ, えながまえ, どうがまえ, けいがまえ]
@@ -166,7 +166,7 @@ xml: |
       </misc>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 尓
     variants:
       jis208: ["28-04"]
@@ -207,7 +207,7 @@ xml: |
       </dic_number>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 悪
     dicRefs:
       nelson_c: ["62"]
@@ -258,7 +258,7 @@ xml: |
       </query_code>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 乏
     queryCodes:
       skip:
@@ -313,7 +313,7 @@ xml: |
       </reading_meaning>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 亜
     readings:
       pinyin: [ya4]
@@ -340,6 +340,6 @@ xml: |
       </reading_meaning>
     </character>
   </kanjidic2>
-characters:
+results:
   - literal: 咸
     nanori: [みな, しげ]

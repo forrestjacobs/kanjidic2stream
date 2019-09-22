@@ -1,0 +1,19 @@
+name: stop parsing after an error
+xml: |
+  <kanjidic2>
+    <error unquoted=1 />
+    <character><literal>日</literal></character>
+  </kanjidic2>
+results:
+  - message: "kanjidic:2:19: unquoted attribute value."
+  - literal: 日
+
+---
+
+name: handles errors at the end
+xml: |
+  <kanjidic2>
+    <character><literal>日</literal></character>
+results:
+  - literal: 日
+  - message: "kanjidic:3:0: unclosed tag: kanjidic2"

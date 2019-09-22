@@ -13,6 +13,8 @@ function append<V>(
   }
 }
 
+/* eslint-disable @typescript-eslint/camelcase */
+
 export const elementHandlers: {
   [name: string]: (
     acc: SparseCharacter,

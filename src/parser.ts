@@ -40,7 +40,7 @@ export class Parser extends Transform {
         if (handler === undefined) {
           saxParser.fail(`unexpected text in tag: ${nodeName}`);
         } else {
-            handler(this.currentElement, text, currentNode.attributes as Record<
+          handler(this.currentElement, text, currentNode.attributes as Record<
             string,
             string
           >);

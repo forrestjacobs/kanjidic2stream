@@ -1,26 +1,11 @@
 import { SaxesParser, SaxesTag } from "saxes";
 import { Transform } from "stream";
-import { SparseCharacter } from "./character";
 import { elementHandlers } from "./element-handlers";
-
-function makeBaseCharacter(): SparseCharacter {
-  return {
-    codepoints: {},
-    radicals: {},
-    strokeCounts: [],
-    variants: {},
-    radNames: [],
-    dicRefs: {},
-    queryCodes: {},
-    readings: {},
-    meanings: {},
-    nanori: []
-  };
-}
+import { elementFactories, SparseElement } from "./sparse-element";
 
 export class Parser extends Transform {
   private readonly sax: SaxesParser;
-  private currentCharacter: SparseCharacter = makeBaseCharacter();
+  private currentElement = {} as SparseElement;
 
   public constructor() {
     super({ readableObjectMode: true });
@@ -35,13 +20,16 @@ export class Parser extends Transform {
     };
     saxParser.onopentag = (node): void => {
       currentNode = node;
+      if (node.name in elementFactories) {
+        this.currentElement = elementFactories[node.name]();
+      }
     };
     saxParser.ontext = (t): void => {
       const text = t.trim();
       if (text) {
         const handler = elementHandlers[currentNode.name];
         if (handler !== undefined) {
-          handler(this.currentCharacter, text, currentNode.attributes as Record<
+            handler(this.currentElement, text, currentNode.attributes as Record<
             string,
             string
           >);
@@ -49,9 +37,8 @@ export class Parser extends Transform {
       }
     };
     saxParser.onclosetag = ({ name }): void => {
-      if (name === "character") {
-        this.push(this.currentCharacter);
-        this.currentCharacter = makeBaseCharacter();
+      if (name in elementFactories) {
+        this.push(this.currentElement);
       }
     };
   }

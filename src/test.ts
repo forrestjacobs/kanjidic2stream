@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "fs";
 import { safeLoadAll } from "js-yaml";
-import { Parser, Character } from ".";
+import { Element, Parser } from ".";
 
 const BASE_CHARACTER = {
   codepoints: {},
@@ -18,7 +18,8 @@ const BASE_CHARACTER = {
 const FIXTURE_PATH = "./fixtures";
 const FIXTURES = readdirSync(FIXTURE_PATH).filter(n => n.endsWith(".yaml"));
 
-type Result = Character | Error;
+type FixtureResult = Element | { type: "error"; message: string };
+type Result = Element | Error;
 
 describe.each(FIXTURES)("%s", filename => {
   const yaml = readFileSync(`${FIXTURE_PATH}/${filename}`, "utf8");
@@ -28,10 +29,17 @@ describe.each(FIXTURES)("%s", filename => {
   ]);
   it.each(documents)(
     "%s",
-    (name, { xml, results }: { xml: string; results: Result[] }) => {
-      const expected = results.map(e =>
-        "literal" in e ? { ...BASE_CHARACTER, ...e } : new Error(e.message)
-      );
+    (name, { xml, results }: { xml: string; results: FixtureResult[] }) => {
+      const expected: Result[] = results.map(e => {
+        switch (e.type) {
+          case "error":
+            return new Error(e.message);
+          case "character":
+            return { ...BASE_CHARACTER, ...e };
+          default:
+            return e;
+        }
+      });
       const actual: Result[] = [];
 
       const parser = new Parser();

@@ -4,7 +4,8 @@ xml: |
     <character><literal>日</literal></character>
   </kanjidic2>
 results:
-  - literal: 日
+  - type: character
+    literal: 日
 
 ---
 name: Handles DOCTYPE
@@ -25,7 +26,8 @@ xml: |
     <character><literal>日</literal></character>
   </kanjidic2>
 results:
-  - literal: 日
+  - type: character
+    literal: 日
 
 ---
 name: parses multiple characters
@@ -35,8 +37,28 @@ xml: |
     <character><literal>二</literal></character>
   </kanjidic2>
 results:
-  - literal: 一
-  - literal: 二
+  - type: character
+    literal: 一
+  - type: character
+    literal: 二
+
+---
+name: parses header
+xml: |
+  <kanjidic2>
+    <header>
+      <file_version>4</file_version>
+      <database_version>2019-03</database_version>
+      <date_of_creation>2019-01-02</date_of_creation>
+    </header>
+  </kanjidic2>
+results:
+  - type: header
+    fileVersion: 4
+    year: 2019
+    versionInYear: 3
+    month: 1
+    day: 2
 
 ---
 name: parses codepoints
@@ -52,7 +74,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 丂
+  - type: character
+    literal: 丂
     codepoints:
       ucs: "4e02"
       jis212: 16-01
@@ -70,7 +93,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 亜
+  - type: character
+    literal: 亜
     radicals:
       classical: 7
 
@@ -87,7 +111,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 応
+  - type: character
+    literal: 応
     radicals:
       classical: 61
       nelson_c: 53
@@ -107,7 +132,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 哀
+  - type: character
+    literal: 哀
     grade: 8
     strokeCounts: [9]
     freq: 1715
@@ -126,7 +152,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 飴
+  - type: character
+    literal: 飴
     strokeCounts: [13, 14]
 
 ---
@@ -145,7 +172,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 冂
+  - type: character
+    literal: 冂
     strokeCounts: [2]
     radNames: [まきがまえ, えながまえ, どうがまえ, けいがまえ]
 
@@ -167,7 +195,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 尓
+  - type: character
+    literal: 尓
     variants:
       jis208: ["28-04"]
       jis212: ["16-62", "16-63", "18-56", "29-91"]
@@ -208,7 +237,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 悪
+  - type: character
+    literal: 悪
     dicRefs:
       nelson_c: ["62"]
       nelson_n: ["1873"]
@@ -259,7 +289,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 乏
+  - type: character
+    literal: 乏
     queryCodes:
       skip:
         - value: 2-1-3
@@ -314,7 +345,8 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 亜
+  - type: character
+    literal: 亜
     readings:
       pinyin: [ya4]
       korean_r: [a]
@@ -341,5 +373,6 @@ xml: |
     </character>
   </kanjidic2>
 results:
-  - literal: 咸
+  - type: character
+    literal: 咸
     nanori: [みな, しげ]

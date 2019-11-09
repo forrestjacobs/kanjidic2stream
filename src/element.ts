@@ -1,3 +1,12 @@
+export interface Header {
+  type: "header";
+  fileVersion: number;
+  year: number;
+  versionInYear: number;
+  month: number;
+  day: number;
+}
+
 export interface MoroDicRef {
   vol: string;
   page: string;
@@ -10,6 +19,7 @@ export interface SkipQueryCode {
 }
 
 export interface Character {
+  type: "character";
   literal: string;
   codepoints: {
     jis208?: string;
@@ -92,20 +102,4 @@ export interface Character {
   nanori: string[];
 }
 
-export type SparseCharacter = Partial<
-  Omit<Character, "codepoints" | "radicals">
-> &
-  Pick<
-    Character,
-    | "strokeCounts"
-    | "variants"
-    | "radNames"
-    | "dicRefs"
-    | "queryCodes"
-    | "readings"
-    | "meanings"
-    | "nanori"
-  > & {
-    codepoints: Partial<Character["codepoints"]>;
-    radicals: Partial<Character["radicals"]>;
-  };
+export type Element = Header | Character;

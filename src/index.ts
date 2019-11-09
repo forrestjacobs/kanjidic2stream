@@ -1,2 +1,2 @@
-export { Character, MoroDicRef, SkipQueryCode } from "./character";
+export { Character, Element, Header, MoroDicRef, SkipQueryCode } from "./element";
 export * from "./parser";

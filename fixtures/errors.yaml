@@ -5,8 +5,10 @@ xml: |
     <character><literal>日</literal></character>
   </kanjidic2>
 results:
-  - message: "kanjidic:2:19: unquoted attribute value."
-  - literal: 日
+  - type: error
+    message: "kanjidic:2:19: unquoted attribute value."
+  - type: character
+    literal: 日
 
 ---
 
@@ -15,5 +17,8 @@ xml: |
   <kanjidic2>
     <character><literal>日</literal></character>
 results:
-  - literal: 日
-  - message: "kanjidic:3:0: unclosed tag: kanjidic2"
+  - type: character
+    literal: 日
+  - type: error
+    message: "kanjidic:3:0: unclosed tag: kanjidic2"
+

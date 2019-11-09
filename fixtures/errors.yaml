@@ -22,3 +22,18 @@ results:
   - type: error
     message: "kanjidic:3:0: unclosed tag: kanjidic2"
 
+---
+
+name: handles text in unexpected tags
+xml: |
+  <kanjidic2>
+    <character>
+      <literal>不</literal>
+      <bad>unhandled</bad>
+    </character>
+  </kanjidic2>
+results:
+  - type: error
+    message: "kanjidic:4:24: unexpected text in tag: bad"
+  - type: character
+    literal: 不

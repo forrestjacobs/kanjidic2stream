@@ -3,6 +3,14 @@ import { Transform } from "stream";
 import { elementHandlers } from "./element-handlers";
 import { elementFactories, SparseElement } from "./sparse-element";
 
+// saxes's typescript declaration file says that `fail` accepts an Error obj as
+// its parameter, but it's actually string
+declare module "saxes" {
+  interface SaxesParser {
+    fail(er: string): this;
+  }
+}
+
 export class Parser extends Transform {
   private readonly sax: SaxesParser;
   private currentElement = {} as SparseElement;
@@ -27,8 +35,11 @@ export class Parser extends Transform {
     saxParser.ontext = (t): void => {
       const text = t.trim();
       if (text) {
-        const handler = elementHandlers[currentNode.name];
-        if (handler !== undefined) {
+        const nodeName = currentNode.name;
+        const handler = elementHandlers[nodeName];
+        if (handler === undefined) {
+          saxParser.fail(`unexpected text in tag: ${nodeName}`);
+        } else {
             handler(this.currentElement, text, currentNode.attributes as Record<
             string,
             string

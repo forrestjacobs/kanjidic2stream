@@ -13,7 +13,11 @@ const { Parser } = require("kanjidic2stream");
 const stream = createReadStream("./kanjidic2.xml", "utf8").pipe(new Parser());
 
 // Print each character
-stream.on("data", c => console.log("character", c.literal));
+stream.on("data", e => {
+  if (e.type === "character") {
+    console.log("character", c.literal);
+  }
+});
 ```
 
 The `kanjidic2stream.Parser` class is a [stream] that reads a KANJIDIC2 file and
@@ -25,6 +29,7 @@ outputs character objects. Piping [this example KANJIDIC2 xml] through
 
 ```JSON
 {
+  "type": "character",
   "literal": "本",
   "codepoints": { "ucs": "672c", "jis208": "43-60" },
   "radicals": { "classical": 75, "nelson_c": 2 },
@@ -115,7 +120,12 @@ Requires [Yarn].
   watch for changes.)
 - `yarn run perf` tests performance using [Benchmark.js]. You need to run
   `build`, and download and extract the [KANJIDIC2 file] to the root of the
-  project before running `perf`.
+  project before running `perf`. You can download & extract it on *nix with:
+
+  ```shell
+  curl http://www.edrdg.org/kanjidic/kanjidic2.xml.gz | gunzip > kanjidic2.xml
+  ```
+
 - Run these before committing:
   - `yarn run format` formats the code in place using [Prettier].
   - `yarn run lint` checks the code using [ESLint].

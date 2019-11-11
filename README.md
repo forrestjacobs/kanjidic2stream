@@ -1,31 +1,56 @@
 # kanjidic2stream
 
-Parse [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) (a
-great open kanji dictionary) in your Node.js app!
+Stream Japanese kanji data from a [KANJIDIC2] file in Node.js.
+
+[kanjidic2]: https://www.edrdg.org/wiki/index.php/KANJIDIC_Project
 
 ## Usage
+
+kanjidic2stream exports `Parser`, a [transform stream] class. Piping a
+KANJIDIC2 xml file to a `Parser` instance produces one object containing the
+header data followed by an object for each character. See the example below.
+Keep in mind that you need to download and extract the [KANJIDIC2 file] to your
+working directory before running the example.
 
 ```JavaScript
 const { createReadStream } = require("fs");
 const { Parser } = require("kanjidic2stream");
 
-// Read the given KANJIDIC2 file and start parsing
+// Read the KANJIDIC file and starts parsing.
 const stream = createReadStream("./kanjidic2.xml", "utf8").pipe(new Parser());
 
-// Print each character
+// Print the KANJIDIC database version followed by each character.
+// Output is like:
+//   database version: 2019-313
+//   character: 亜
+//   character: 唖
+//   character: 娃
+//   ...
 stream.on("data", e => {
-  if (e.type === "character") {
-    console.log("character", c.literal);
+  if (e.type === "header") {
+    console.log("database version:", e.year + '-' + e.versionInYear);
+  } else if (e.type === "character") {
+    console.log("character", e.literal);
   }
 });
 ```
 
-The `kanjidic2stream.Parser` class is a [stream] that reads a KANJIDIC2 file and
-outputs character objects. Piping [this example KANJIDIC2 xml] through
-`kanjidic2stream.Parser` would produce the following character object:
+The header object looks like the example below. If you're using TypeScript,
+import `Header` to see its interface.
 
-[stream]: https://nodejs.org/api/stream.html
-[this example KANJIDIC2 xml]: https://www.edrdg.org/kanjidic/kd2examph.html
+```JSON
+{
+  "type": "header",
+  "fileVersion": 4,
+  "year": 2019,
+  "versionInYear": 313,
+  "month": 11,
+  "day": 9
+}
+```
+
+The character objects (using [this example xml]) look like the example below. If
+you're using TypeScript, import `Character` to see its interface.
 
 ```JSON
 {
@@ -112,7 +137,25 @@ outputs character objects. Piping [this example KANJIDIC2 xml] through
 }
 ```
 
-## Contributing
+[transform stream]: https://nodejs.org/api/stream.html#stream_class_stream_transform
+[this example xml]: https://www.edrdg.org/kanjidic/kd2examph.html
+
+## Motivation
+
+There are plenty of KANJIDIC parsers for Node.js, but I wanted to create a
+parser that (a) uses the KANJIDIC2 xml file rather than the more limited text
+dictionary files, and (b) uses Node.js streams since the xml file is quite
+large.
+
+## License
+
+This project is released under the [ISC license]. Keep in mind that the
+[KANJIDIC files have their own license][kanjidic license].
+
+[isc license]: https://tldrlegal.com/l/isc
+[kanjidic license]: https://www.edrdg.org/wiki/index.php/KANJIDIC_Project#Copyright_and_Permissions
+
+## Building & Contributing
 
 Requires [Yarn].
 
@@ -120,12 +163,7 @@ Requires [Yarn].
   watch for changes.)
 - `yarn run perf` tests performance using [Benchmark.js]. You need to run
   `build`, and download and extract the [KANJIDIC2 file] to the root of the
-  project before running `perf`. You can download & extract it on *nix with:
-
-  ```shell
-  curl http://www.edrdg.org/kanjidic/kanjidic2.xml.gz | gunzip > kanjidic2.xml
-  ```
-
+  project before running `perf`.
 - Run these before committing:
   - `yarn run format` formats the code in place using [Prettier].
   - `yarn run lint` checks the code using [ESLint].

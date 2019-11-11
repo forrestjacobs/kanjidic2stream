@@ -1,5 +1,5 @@
 import { createReadStream } from "fs";
-import { Suite, Event } from "benchmark";
+import { Deferred, Suite, Event } from "benchmark";
 import { Parser } from ".";
 
 /*
@@ -7,8 +7,10 @@ import { Parser } from ".";
     in the same directory.
 */
 
-interface Deferred {
-  resolve(): void;
+declare module "benchmark" {
+  interface Deferred {
+    resolve(): void;
+  }
 }
 
 new Suite()

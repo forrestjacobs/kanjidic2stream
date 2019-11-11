@@ -1,0 +1,9 @@
+/coverage
+.editorconfig
+.eslint*
+.prettierignore
+jest.config.js
+kanjidic2.xml
+src
+tsconfig*
+yarn-error.log

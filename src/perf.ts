@@ -19,6 +19,7 @@ new Suite()
     fn: (deferred: Deferred) => {
       createReadStream("./kanjidic2.xml", "utf8")
         .pipe(new Parser())
+        .on("error", e => console.error("error", e))
         .on("data", () => {})
         .on("finish", () => deferred.resolve());
     }

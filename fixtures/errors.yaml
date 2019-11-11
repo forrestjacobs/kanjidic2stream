@@ -34,6 +34,6 @@ xml: |
   </kanjidic2>
 results:
   - type: error
-    message: "kanjidic:4:24: unexpected text in tag: bad"
+    message: "kanjidic:4:19: unexpected text in tag: bad"
   - type: character
     literal: 不

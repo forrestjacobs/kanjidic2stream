@@ -8,7 +8,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^12.7.5",
-    "saxes": "^3.1.11"
+    "saxes": "^4.0.2"
   },
   "devDependencies": {
     "@types/benchmark": "^1.0.31",

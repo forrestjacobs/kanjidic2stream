@@ -1,6 +1,6 @@
 {
   "name": "kanjidic2stream",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Stream Japanese kanji data from a KANJIDIC2 file",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

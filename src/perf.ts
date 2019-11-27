@@ -1,5 +1,5 @@
+import { Deferred, Event, Suite } from "benchmark";
 import { createReadStream } from "fs";
-import { Deferred, Suite, Event } from "benchmark";
 import { Parser } from ".";
 
 /*

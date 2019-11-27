@@ -24,16 +24,20 @@ results:
 
 ---
 
-name: handles text in unexpected tags
+name: ignores empty text
 xml: |
   <kanjidic2>
     <character>
-      <literal>不</literal>
-      <bad>unhandled</bad>
+      <literal>冂</literal>
+      <misc>
+        <stroke_count>2</stroke_count>
+        <rad_name>まきがまえ</rad_name>
+        <rad_name> </rad_name>
+      </misc>
     </character>
   </kanjidic2>
 results:
-  - type: error
-    message: "kanjidic:4:19: unexpected text in tag: bad"
   - type: character
-    literal: 不
+    literal: 冂
+    strokeCounts: [2]
+    radNames: [まきがまえ]

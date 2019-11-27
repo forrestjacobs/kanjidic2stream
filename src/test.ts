@@ -29,7 +29,10 @@ describe.each(FIXTURES)("%s", filename => {
   ]);
   it.each(documents)(
     "%s",
-    (name, { xml, results }: { xml: string; results: FixtureResult[] }) => {
+    async (
+      name,
+      { xml, results }: { xml: string; results: FixtureResult[] }
+    ) => {
       const expected: Result[] = results.map(e => {
         switch (e.type) {
           case "error":
@@ -40,13 +43,16 @@ describe.each(FIXTURES)("%s", filename => {
             return e;
         }
       });
-      const actual: Result[] = [];
 
-      const parser = new Parser();
-      parser.on("data", character => actual.push(character));
-      parser.on("error", error => actual.push(error));
+      const actual: Result[] = await new Promise(resolve => {
+        const acc: Result[] = [];
+        const parser = new Parser();
+        parser.on("data", character => acc.push(character));
+        parser.on("error", error => acc.push(error));
+        parser.on("finish", () => resolve(acc));
 
-      parser.end(xml);
+        parser.end(Buffer.from(xml));
+      });
 
       expect(actual).toStrictEqual(expected);
     }
